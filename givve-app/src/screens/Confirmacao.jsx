@@ -84,42 +84,32 @@ export function Confirmacao({ go, ong }) {
             onClick={(e) => e.stopPropagation()}
             style={{
               width: "100%",
-              background: C.cream,
-              borderTopLeftRadius: 24,
-              borderTopRightRadius: 24,
-              display: "flex",
-              flexDirection: "column",
-              padding: "16px 20px 24px",
-              boxShadow: "0 -8px 24px rgba(22, 32, 27, 0.15)",
+              position: "relative",
               animation: "gvSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1)",
-              maxHeight: "85%"
+              maxHeight: "90%",
+              display: "flex",
+              flexDirection: "column"
             }}
           >
-            <div style={{ width: 36, height: 4, background: C.borderEm, borderRadius: 2, alignSelf: "center", marginBottom: 16 }} />
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
-              <span style={{ fontFamily: F.serif, fontSize: 18, color: C.dark }}>Compartilhar doação</span>
-              <button
-                onClick={() => setShowShare(false)}
-                style={{
-                  background: "transparent",
-                  border: "none",
-                  cursor: "pointer",
-                  padding: 4,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  color: C.soft
-                }}
-              >
-                <X size={20} />
-              </button>
-            </div>
+            <img src={shareImg} alt="Card de Compartilhamento" style={{ width: "100%", height: "auto", display: "block" }} />
             
-            <div style={{ overflowY: "auto", flex: 1, borderRadius: 12, border: `1px solid ${C.border}`, marginBottom: 16, background: C.white }}>
-              <img src={shareImg} alt="Card de Compartilhamento" style={{ width: "100%", height: "auto", display: "block" }} />
-            </div>
-
-            <Button onClick={() => setShowShare(false)}>Concluir</Button>
+            <button
+              onClick={() => setShowShare(false)}
+              style={{
+                position: "absolute",
+                right: "7.8%",
+                top: "6.2%",
+                width: 36,
+                height: 36,
+                transform: "translate(50%, -50%)",
+                background: "transparent",
+                border: "none",
+                cursor: "pointer",
+                borderRadius: "50%",
+                outline: "none",
+                WebkitTapHighlightColor: "transparent"
+              }}
+            />
           </div>
         </div>
       )}
