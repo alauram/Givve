@@ -1,4 +1,4 @@
-import { ChevronRight, Package, ShieldCheck, FileText, LogOut } from "lucide-react";
+import { ChevronRight, Package, Settings, FileText, Building2, LogOut } from "lucide-react";
 import { C, F } from "../theme/tokens";
 import { TopBar } from "../components/TopBar";
 import { Card } from "../components/Card";
@@ -8,11 +8,12 @@ import { BottomNav } from "../components/BottomNav";
 
 
 export function Perfil({ go, showToast }) {
-  const stats = [["12", "doações"], ["4", "ONGs"], ["38", "itens"]];
+  const stats = [["12", "doações"], ["38", "itens"]];
   const menu = [
-    { Icon: Package, t: "Minhas doações" },
-    { Icon: ShieldCheck, t: "Dados e privacidade" },
-    { Icon: FileText, t: "Perguntas frequentes" },
+    { Icon: Package, t: "Minhas doações", onClick: () => showToast("Em breve") },
+    { Icon: Settings, t: "Configurações", onClick: () => go("a9") },
+    { Icon: FileText, t: "Perguntas frequentes", onClick: () => go("a11") },
+    { Icon: Building2, t: "Painel da ONG", onClick: () => go("management") },
   ];
   return (
     <>
@@ -28,7 +29,7 @@ export function Perfil({ go, showToast }) {
 
         <Card style={{ display: "flex", padding: "14px 0", marginBottom: 18 }}>
           {stats.map(([n, l], i) => (
-            <div key={i} style={{ flex: 1, textAlign: "center", borderRight: i < 2 ? `1px solid ${C.border}` : "none" }}>
+            <div key={i} style={{ flex: 1, textAlign: "center", borderRight: i < stats.length - 1 ? `1px solid ${C.border}` : "none" }}>
               <p style={{ margin: 0, fontFamily: F.serif, fontSize: 20, color: C.green }}>{n}</p>
               <p style={{ margin: "2px 0 0", fontFamily: F.mono, fontSize: 10, letterSpacing: ".06em", textTransform: "uppercase", color: C.label }}>{l}</p>
             </div>
@@ -36,8 +37,8 @@ export function Perfil({ go, showToast }) {
         </Card>
 
         <Label>Conta</Label>
-        {menu.map(({ Icon, t }) => (
-          <Card key={t} onClick={() => showToast("Em breve")}
+        {menu.map(({ Icon, t, onClick }) => (
+          <Card key={t} onClick={onClick}
             style={{ padding: "13px 14px", marginBottom: 8, display: "flex", alignItems: "center", gap: 12 }}>
             <Icon size={20} color={C.green} />
             <span style={{ flex: 1, fontSize: 14, color: C.ink }}>{t}</span>

@@ -7,7 +7,7 @@ export function BottomNav({ active, go, showToast }) {
   const tabs = [
     { k: "inicio", Icon: Home, onPress: () => showToast("Em breve") },
     { k: "buscar", Icon: Search, onPress: () => go("buscar") },
-    { k: "sino", Icon: Bell, onPress: () => showToast("Em breve") },
+    { k: "a10", Icon: Bell, onPress: () => go("a10") },
     { k: "a8", Icon: User, onPress: () => go("a8") },
   ];
   return (
