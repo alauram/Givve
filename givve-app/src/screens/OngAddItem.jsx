@@ -15,25 +15,21 @@ export function OngAddItem({ go, showToast, onAdd }) {
             return;
         }
 
-        // Escolhe uma cor aleatória para a barra de progresso ficar bonita
-        const colors = ["#1E3A8A", "#D97706", "#059669", "#DC2626", "#7C3AED", "#2563EB"];
-        const randomColor = colors[Math.floor(Math.random() * colors.length)];
-
+        // Envia os dados crus do formulário para o App.jsx processar
         onAdd({
-            id: Date.now(),
             name: name,
-            target: parseInt(quantity, 10),
-            current: 0, // Inicia zerado
-            color: randomColor
+            quantity: quantity,
+            urgency: urgency,
+            category: category
         });
 
-        showToast("Item salvo com sucesso!");
-        go("ongTracking");
+        showToast("Item adicionado à lista!");
+        go("management");
     };
 
     return (
         <div style={styles.page}>
-            <ScreenHeader title="Adicionar item" onBack={() => go("ongTracking")} />
+            <ScreenHeader title="Adicionar item" onBack={() => go("management")} />
 
             <div style={styles.scroll}>
                 <label style={styles.label}>NOME DO ITEM</label>

@@ -2,48 +2,51 @@ import { Plus } from 'lucide-react';
 import ScreenHeader from '../components/ScreenHeader';
 import UrgentBadge from '../components/UrgentBadge';
 import { C, F } from '../theme/tokens';
+import { OngBottomNav } from '../components/OngBottomNav';
 
-export default function ManagementScreen({ goal, needs, onAddItem, onBack }) {
+export default function ManagementScreen({ goal, needs, onAddItem, go }) {
   const percentage = Math.round((goal.current / goal.target) * 100);
 
   return (
-    <div style={styles.page}>
-      <ScreenHeader title="Painel de Gestão" onBack={onBack} avatar="OR" />
+      <div style={styles.page}>
+        <ScreenHeader title="Painel de Gestão" avatar="OR" />
 
-      <div style={styles.scroll}>
-        <p style={styles.sectionLabel}>Meta de Arrecadação</p>
-        <div style={styles.goalCard}>
-          <div style={styles.progressTrack}>
-            <div style={{ ...styles.progressFill, width: `${percentage}%` }} />
-          </div>
-          <span style={styles.goalText}>
+        <div style={styles.scroll}>
+          <p style={styles.sectionLabel}>Meta de Arrecadação</p>
+          <div style={styles.goalCard}>
+            <div style={styles.progressTrack}>
+              <div style={{ ...styles.progressFill, width: `${percentage}%` }} />
+            </div>
+            <span style={styles.goalText}>
             R$ {formatCurrency(goal.current)} de R$ {formatCurrency(goal.target)} · {percentage}%
           </span>
-        </div>
+          </div>
 
-        <p style={styles.sectionLabel}>Lista de Necessidades Ativas</p>
-        <div style={styles.needsList}>
-          {needs.map((need) => (
-            <div key={need.id} style={styles.needRow}>
-              <span style={styles.needName}>{need.name}</span>
-              {need.urgent ? (
-                <UrgentBadge compact />
-              ) : (
-                <span style={styles.quantityPill}>
+          <p style={styles.sectionLabel}>Lista de Necessidades Ativas</p>
+          <div style={styles.needsList}>
+            {needs.map((need) => (
+                <div key={need.id} style={styles.needRow}>
+                  <span style={styles.needName}>{need.name}</span>
+                  {need.urgent ? (
+                      <UrgentBadge compact />
+                  ) : (
+                      <span style={styles.quantityPill}>
                   x{need.quantity}
-                  {need.unit ? ` ${need.unit}` : ''}
+                        {need.unit ? ` ${need.unit}` : ''}
                 </span>
-              )}
-            </div>
-          ))}
+                  )}
+                </div>
+            ))}
+          </div>
+
+          <button style={styles.addButton} onClick={onAddItem}>
+            <Plus size={18} strokeWidth={2.5} />
+            Adicionar Item
+          </button>
         </div>
 
-        <button style={styles.addButton} onClick={onAddItem}>
-          <Plus size={18} strokeWidth={2.5} />
-          Adicionar Item
-        </button>
+        <OngBottomNav active="management" go={go} />
       </div>
-    </div>
   );
 }
 

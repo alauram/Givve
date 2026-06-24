@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { Settings } from "lucide-react";
-import ScreenHeader from "../components/ScreenHeader";
+import { Settings, ChevronLeft } from "lucide-react";
 import { C, F } from "../theme/tokens";
 import { OngBottomNav } from "../components/OngBottomNav";
 import { LOGO_RECOMECANDO } from "../assets/logos";
@@ -11,12 +10,24 @@ export function OngProfile({ go, showToast }) {
 
     return (
         <div style={styles.page}>
-            <ScreenHeader
-                title="Perfil da ONG"
-                onBack={isEditing ? () => setIsEditing(false) : null}
-                rightIcon={!isEditing ? <Settings size={20} color={C.dark} /> : null}
-                onRightClick={!isEditing ? () => showToast("Configurações em breve") : null}
-            />
+            {/* CABEÇALHO CUSTOMIZADO */}
+            <div style={styles.header}>
+                <div style={styles.headerLeft}>
+                    {isEditing && (
+                        <button onClick={() => setIsEditing(false)} style={styles.iconBtn}>
+                            <ChevronLeft size={28} color={C.dark} strokeWidth={2} />
+                        </button>
+                    )}
+                    <h1 style={styles.headerTitle}>Perfil da ONG</h1>
+                </div>
+
+                {/* Botão de engrenagem no canto superior direito */}
+                {!isEditing && (
+                    <button onClick={() => go("ongSettings")} style={styles.iconBtn}>
+                        <Settings size={24} color={C.dark} />
+                    </button>
+                )}
+            </div>
 
             <div style={styles.scroll}>
                 <div style={styles.logoCard}>
@@ -64,6 +75,13 @@ export function OngProfile({ go, showToast }) {
 
 const styles = {
     page: { display: "flex", flexDirection: "column", height: "100%" },
+
+    /* Estilos do novo cabeçalho */
+    header: { display: "flex", alignItems: "center", justifyContent: "space-between", padding: "16px 20px" },
+    headerLeft: { display: "flex", alignItems: "center", gap: 8 },
+    headerTitle: { fontFamily: F.serif, fontSize: 24, color: C.dark, margin: 0 },
+    iconBtn: { background: "transparent", border: "none", cursor: "pointer", padding: 0, display: "flex", alignItems: "center", justifyContent: "center" },
+
     scroll: { flex: 1, overflowY: "auto", padding: "8px 20px 20px" },
     logoCard: { background: C.white, border: `1px solid ${C.border}`, borderRadius: 16, padding: "20px", display: "flex", flexDirection: "column", alignItems: "center", marginBottom: 24 },
     logo: { width: 80, height: 80, objectFit: "contain", marginBottom: 12 },

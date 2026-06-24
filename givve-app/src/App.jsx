@@ -40,8 +40,26 @@ export default function App() {
         { id: 2, name: "Leite Integral", current: 9, target: 30, color: "#D97706" }
     ]);
 
-    const handleAddOngItem = (newItem) => {
-        setOngItems((prev) => [...prev, newItem]);
+    const handleAddOngItem = (data) => {
+        // 1. Atualiza a lista da tela de Gestão (Management)
+        setNeeds((prev) => [{
+            id: Date.now(),
+            name: data.name,
+            quantity: parseInt(data.quantity, 10),
+            urgent: data.urgency === "Alta"
+        }, ...prev]);
+
+        // 2. Atualiza a tela de Acompanhamento (Barrinhas)
+        const colors = ["#1E3A8A", "#D97706", "#059669", "#DC2626", "#7C3AED", "#2563EB"];
+        const randomColor = colors[Math.floor(Math.random() * colors.length)];
+
+        setOngItems((prev) => [...prev, {
+            id: Date.now() + 1,
+            name: data.name,
+            target: parseInt(data.quantity, 10),
+            current: 0,
+            color: randomColor
+        }]);
     };
 
   const [settings, setSettings] = useState({
@@ -51,7 +69,7 @@ export default function App() {
   });
   const [anonymousDonations, setAnonymousDonations] = useState(false);
   const [notifications, setNotifications] = useState(initialNotifications);
-  const [needs] = useState(initialNeeds);
+  const [needs, setNeeds] = useState(initialNeeds);
   const [prevScreen, setPrevScreen] = useState("buscar");
 
   const go = (target) => {
@@ -115,14 +133,14 @@ export default function App() {
             showToast={showToast}
         />
     ),
-    management: (
-        <ManagementScreen
-            goal={campaignGoal}
-            needs={needs}
-            onAddItem={() => showToast("Em breve")}
-            onBack={() => go("a8")}
-        />
-    ),
+      management: (
+          <ManagementScreen
+              goal={campaignGoal}
+              needs={needs}
+              onAddItem={() => go("ongAddItem")}
+              go={go}
+          />
+      ),
     partnerHome: <PartnerDashboard go={go} showToast={showToast} abrirPedido={abrirPedidoParceiro} />,
     partnerHistory: <PartnerHistory go={go} showToast={showToast} abrirPedido={abrirPedidoParceiro} />,
     partnerStore: <MeuEstabelecimento go={go} showToast={showToast} />,

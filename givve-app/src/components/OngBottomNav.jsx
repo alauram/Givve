@@ -1,4 +1,4 @@
-import { Activity, RotateCcw, User, Settings } from "lucide-react";
+import { LayoutGrid, Activity, RotateCcw, User } from "lucide-react";
 import { C } from "../theme/tokens";
 
 export function OngBottomNav({ active, go }) {
@@ -24,10 +24,10 @@ export function OngBottomNav({ active, go }) {
             display: "flex", background: C.white, borderTop: `1px solid ${C.border}`,
             paddingBottom: "env(safe-area-inset-bottom, 0px)",
         }}>
+            <NavItem id="management" Icon={LayoutGrid} />
             <NavItem id="ongTracking" Icon={Activity} />
             <NavItem id="ongHistory" Icon={RotateCcw} />
             <NavItem id="ongProfile" Icon={User} />
-            <NavItem id="ongSettings" Icon={Settings} />
         </div>
     );
 }

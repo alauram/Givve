@@ -20,7 +20,6 @@ export function OngDashboard({ go, items }) {
 
                 <div style={styles.sectionHeader}>
                     <p style={styles.sectionLabel}>EM ANDAMENTO</p>
-                    <button style={styles.addBtn} onClick={() => go("ongAddItem")}>+ ADD ITEM</button>
                 </div>
 
                 {/* Renderização Dinâmica dos Itens */}
