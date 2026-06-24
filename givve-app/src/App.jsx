@@ -19,17 +19,30 @@ import HelpScreen from "./screens/HelpScreen";
 import ManageDataScreen from "./screens/ManageDataScreen";
 import ManagementScreen from "./screens/ManagementScreen";
 import { PartnerSettings } from "./screens/PartnerSettings";
+import { OngDashboard } from "./screens/OngDashboard";
+import { OngAddItem } from "./screens/OngAddItem";
+import { OngHistory } from "./screens/OngHistory";
+import { OngProfile } from "./screens/OngProfile";
+import { OngSettings } from "./screens/OngSettings";
 
 export default function App() {
-  const [screen, setScreen] = useState("buscar");
+  const [screen, setScreen] = useState("ongTracking");
   const [market, setMarket] = useState(MERCADOS[0]);
   const [ong, setOng] = useState("ONG Esperança");
   const [cart, setCart] = useState([]);
   const [preItem, setPreItem] = useState(null);
   const [toast, setToast] = useState(null);
 
-  // NOVO: Estado para guardar o pedido clicado
   const [partnerOrderId, setPartnerOrderId] = useState(1042);
+
+    const [ongItems, setOngItems] = useState([
+        { id: 1, name: "Arroz 5Kg", current: 14, target: 20, color: "#1E3A8A" },
+        { id: 2, name: "Leite Integral", current: 9, target: 30, color: "#D97706" }
+    ]);
+
+    const handleAddOngItem = (newItem) => {
+        setOngItems((prev) => [...prev, newItem]);
+    };
 
   const [settings, setSettings] = useState({
     colorBlindMode: false,
@@ -115,7 +128,13 @@ export default function App() {
     partnerStore: <MeuEstabelecimento go={go} showToast={showToast} />,
     partnerSettings: <PartnerSettings go={go} showToast={showToast} settings={settings} onToggle={handleToggleSetting} />,
     partnerOrder: <PartnerOrderDetail key={`order-${partnerOrderId}`} go={go} showToast={showToast} orderId={partnerOrderId} />,
+      ongTracking: <OngDashboard go={go} showToast={showToast} items={ongItems} />,
+      ongAddItem: <OngAddItem go={go} showToast={showToast} onAdd={handleAddOngItem} />,
+    ongHistory: <OngHistory go={go} showToast={showToast} />,
+    ongProfile: <OngProfile go={go} showToast={showToast} />,
+      ongSettings: <OngSettings go={go} showToast={showToast} settings={settings} onToggle={handleToggleSetting} />,
   };
+
   return (
       <PhoneFrame>
         {/* Filtro Matemático de Deuteranopia */}
