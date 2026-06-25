@@ -5,7 +5,7 @@ import ScreenHeader from "../components/ScreenHeader";
 import Toggle from "../components/Toggle";
 import { PartnerBottomNav } from "../components/PartnerBottomNav";
 
-const INITIAL = {
+export const ESTABELECIMENTO_INICIAL = {
     nome: "Mercado Bom Preço",
     rua: "Rua das Flores",
     numero: "240",
@@ -30,14 +30,16 @@ function formatHour(val) {
     return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`;
 }
 
-export function MeuEstabelecimento({ go, showToast }) {
+export function MeuEstabelecimento({ go, showToast, estabelecimento, onSaveEstabelecimento }) {
     const [editing, setEditing] = useState(false);
 
     if (editing) {
         return (
             <EditarNegocio
+                estabelecimento={estabelecimento}
                 onBack={() => setEditing(false)}
-                onSave={() => {
+                onSave={(form) => {
+                    onSaveEstabelecimento(form);
                     setEditing(false);
                     showToast("Informações salvas!");
                 }}
@@ -50,7 +52,6 @@ export function MeuEstabelecimento({ go, showToast }) {
             <ScreenHeader title="Meu Estabelecimento" />
 
             <div style={styles.scroll}>
-                {/* Store photo */}
                 <div style={styles.photoWrap}>
                     <div style={styles.photoPlaceholder}>
                         <span style={styles.photoIcon}>🛒</span>
@@ -58,31 +59,29 @@ export function MeuEstabelecimento({ go, showToast }) {
                     <div style={styles.onlineDot} />
                 </div>
 
-                {/* Name + badge */}
-                <p style={styles.storeName}>{INITIAL.nome}</p>
+                <p style={styles.storeName}>{estabelecimento.nome}</p>
                 <div style={styles.badgeWrap}>
                     <span style={styles.badge}>Parceiro da Solidariedade</span>
                 </div>
 
-                {/* Info card */}
                 <p style={styles.sectionLabel}>INFORMAÇÕES DO NEGÓCIO</p>
                 <div style={styles.infoCard}>
                     <div style={styles.infoRow}>
                         <MapPin size={16} color={C.soft} style={{ flexShrink: 0 }} />
                         <span style={styles.infoText}>
-              {INITIAL.rua}, {INITIAL.numero} - {INITIAL.bairro}
+              {estabelecimento.rua}, {estabelecimento.numero} - {estabelecimento.bairro}
             </span>
                     </div>
                     <div style={styles.divider} />
                     <div style={styles.infoRow}>
                         <Phone size={16} color={C.soft} style={{ flexShrink: 0 }} />
-                        <span style={styles.infoText}>{INITIAL.telefone}</span>
+                        <span style={styles.infoText}>{estabelecimento.telefone}</span>
                     </div>
                     <div style={styles.divider} />
                     <div style={styles.infoRow}>
                         <Clock size={16} color={C.soft} style={{ flexShrink: 0 }} />
                         <span style={styles.infoText}>
-              Seg - Sáb · {INITIAL.horaInicio} às {INITIAL.horaFim}
+              Seg - Sáb · {estabelecimento.horaInicio} às {estabelecimento.horaFim}
             </span>
                     </div>
                 </div>
@@ -97,8 +96,8 @@ export function MeuEstabelecimento({ go, showToast }) {
     );
 }
 
-function EditarNegocio({ onBack, onSave }) {
-    const [form, setForm] = useState({ ...INITIAL });
+function EditarNegocio({ estabelecimento, onBack, onSave }) {
+    const [form, setForm] = useState({ ...estabelecimento });
     const set = (k, v) => setForm((s) => ({ ...s, [k]: v }));
 
     const sliderStart = parseHour(form.horaInicio);
@@ -109,7 +108,6 @@ function EditarNegocio({ onBack, onSave }) {
             <ScreenHeader title="Editar Negócio" onBack={onBack} center />
 
             <div style={styles.scroll}>
-                {/* Address */}
                 <p style={styles.sectionLabel}>ENDEREÇO</p>
                 <div style={styles.gridRow}>
                     <InputField label="Rua" value={form.rua} onChange={(v) => set("rua", v)} flex={2} />
@@ -121,7 +119,6 @@ function EditarNegocio({ onBack, onSave }) {
                     <InputField label="Referência" value={form.referencia} onChange={(v) => set("referencia", v)} flex={2} />
                 </div>
 
-                {/* Phone */}
                 <p style={styles.sectionLabel}>TELEFONE</p>
                 <div style={styles.inputWrap}>
                     <input
@@ -131,7 +128,6 @@ function EditarNegocio({ onBack, onSave }) {
                     />
                 </div>
 
-                {/* Hours */}
                 <p style={styles.sectionLabel}>HORÁRIO DE FUNCIONAMENTO</p>
                 <div style={styles.hoursCard}>
                     <div style={styles.hoursRow}>
@@ -162,7 +158,6 @@ function EditarNegocio({ onBack, onSave }) {
                     </div>
                 </div>
 
-                {/* Delivery model */}
                 <p style={styles.sectionLabel}>MODELO DE ENTREGA</p>
                 <div style={styles.deliveryCard}>
                     <div style={styles.deliveryRow}>
@@ -188,7 +183,7 @@ function EditarNegocio({ onBack, onSave }) {
                     pelo menos uma das opções esteja ativa.
                 </p>
 
-                <button style={styles.saveBtn} onClick={onSave}>
+                <button style={styles.saveBtn} onClick={() => onSave(form)}>
                     Salvar
                 </button>
             </div>
@@ -295,7 +290,6 @@ const styles = {
         fontWeight: 600,
         cursor: "pointer",
     },
-    // Edit form styles
     gridRow: { display: "flex", gap: 8, marginBottom: 8 },
     inputWrap: {
         background: C.white,

@@ -16,7 +16,7 @@ const ONGS = [
     "Casa do Caminho",
 ];
 
-export default function PartnerDashboard({ go, showToast, abrirPedido }) {
+export default function PartnerDashboard({ go, showToast, abrirPedido, orderProgress = {} }) {
     const maxVal = Math.max(...SALES_DATA);
 
     return (
@@ -27,7 +27,6 @@ export default function PartnerDashboard({ go, showToast, abrirPedido }) {
             />
 
             <div style={styles.scroll}>
-                {/* Sales chart card */}
                 <div style={styles.card}>
                     <p style={styles.chartLabel}>VOLUME DE VENDAS · 7 DIAS</p>
                     <p style={styles.chartValue}>{brl(1840)}</p>
@@ -53,7 +52,6 @@ export default function PartnerDashboard({ go, showToast, abrirPedido }) {
                     </div>
                 </div>
 
-                {/* Orders section */}
                 <p style={styles.sectionLabel}>PEDIDOS RECEBIDOS VIA APP</p>
                 {ORDERS.map((o) => (
                     <button
@@ -67,7 +65,7 @@ export default function PartnerDashboard({ go, showToast, abrirPedido }) {
                                 {o.items} itens · {o.time}
                             </p>
                         </div>
-                        {o.isNew ? (
+                        {o.isNew && !orderProgress[o.id] ? (
                             <span style={styles.newBadge}>NOVO</span>
                         ) : (
                             <ChevronRight size={18} color={C.iconOff} />
@@ -75,7 +73,6 @@ export default function PartnerDashboard({ go, showToast, abrirPedido }) {
                     </button>
                 ))}
 
-                {/* ONGs section */}
                 <p style={styles.sectionLabel}>ONG'S QUE ATENDO</p>
                 {ONGS.map((ong) => (
                     <div key={ong} style={styles.ongCard}>

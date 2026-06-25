@@ -4,24 +4,24 @@ import { C, F } from "../theme/tokens";
 import { OngBottomNav } from "../components/OngBottomNav";
 import { LOGO_RECOMECANDO } from "../assets/logos";
 
-export function OngProfile({ go, showToast }) {
+export const MISSAO_INICIAL = "Combater a vulnerabilidade social e fomentar a cidadania por meio da educação, cultura, esporte e qualificação profissional.";
+
+export function OngProfile({ go, showToast, missao, onSaveMissao }) {
     const [isEditing, setIsEditing] = useState(false);
-    const [missao, setMissao] = useState("Combater a vulnerabilidade social e fomentar a cidadania por meio da educação, cultura, esporte e qualificação profissional.");
+    const [rascunho, setRascunho] = useState(missao);
 
     return (
         <div style={styles.page}>
-            {/* CABEÇALHO CUSTOMIZADO */}
             <div style={styles.header}>
                 <div style={styles.headerLeft}>
                     {isEditing && (
-                        <button onClick={() => setIsEditing(false)} style={styles.iconBtn}>
+                        <button onClick={() => { setRascunho(missao); setIsEditing(false); }} style={styles.iconBtn}>
                             <ChevronLeft size={28} color={C.dark} strokeWidth={2} />
                         </button>
                     )}
                     <h1 style={styles.headerTitle}>Perfil da ONG</h1>
                 </div>
 
-                {/* Botão de engrenagem no canto superior direito */}
                 {!isEditing && (
                     <button onClick={() => go("ongSettings")} style={styles.iconBtn}>
                         <Settings size={24} color={C.dark} />
@@ -39,8 +39,8 @@ export function OngProfile({ go, showToast }) {
                 {isEditing ? (
                     <textarea
                         style={styles.textarea}
-                        value={missao}
-                        onChange={(e) => setMissao(e.target.value)}
+                        value={rascunho}
+                        onChange={(e) => setRascunho(e.target.value)}
                     />
                 ) : (
                     <div style={styles.infoCard}>
@@ -60,7 +60,10 @@ export function OngProfile({ go, showToast }) {
                 <button
                     style={styles.actionBtn}
                     onClick={() => {
-                        if (isEditing) showToast("Perfil salvo!");
+                        if (isEditing) {
+                            onSaveMissao(rascunho);
+                            showToast("Perfil salvo!");
+                        }
                         setIsEditing(!isEditing);
                     }}
                 >
@@ -75,8 +78,6 @@ export function OngProfile({ go, showToast }) {
 
 const styles = {
     page: { display: "flex", flexDirection: "column", height: "100%" },
-
-    /* Estilos do novo cabeçalho */
     header: { display: "flex", alignItems: "center", justifyContent: "space-between", padding: "16px 20px" },
     headerLeft: { display: "flex", alignItems: "center", gap: 8 },
     headerTitle: { fontFamily: F.serif, fontSize: 24, color: C.dark, margin: 0 },

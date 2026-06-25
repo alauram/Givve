@@ -1,13 +1,17 @@
-import { ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { C, F } from "../theme/tokens";
 import { OngBottomNav } from "../components/OngBottomNav";
 import Toggle from "../components/Toggle";
 
-export function OngSettings({ go, showToast, settings, onToggle }) {
+export function OngSettings({ go, showToast, settings, onToggle, onLogout }) {
     return (
         <div style={styles.page}>
-            <div style={{ padding: "24px 20px 16px", textAlign: "center" }}>
+            <div style={styles.header}>
+                <button onClick={() => go("ongProfile")} style={styles.iconBtn}>
+                    <ChevronLeft size={26} color={C.dark} strokeWidth={2} />
+                </button>
                 <h1 style={styles.title}>Configurações</h1>
+                <span style={styles.iconBtn} />
             </div>
 
             <div style={styles.scroll}>
@@ -38,6 +42,15 @@ export function OngSettings({ go, showToast, settings, onToggle }) {
                         <ChevronRight size={18} color={C.soft} />
                     </button>
                 </div>
+
+                <div style={styles.card}>
+                    <button
+                        style={styles.linkRow}
+                        onClick={onLogout}
+                    >
+                        <span style={{ ...styles.text, color: C.danger }}>Sair</span>
+                    </button>
+                </div>
             </div>
 
             <OngBottomNav active="ongSettings" go={go} />
@@ -47,7 +60,9 @@ export function OngSettings({ go, showToast, settings, onToggle }) {
 
 const styles = {
     page: { display: "flex", flexDirection: "column", height: "100%" },
-    title: { fontFamily: F.serif, fontSize: 24, color: C.dark, margin: 0 },
+    header: { display: "flex", alignItems: "center", justifyContent: "space-between", padding: "16px 20px" },
+    iconBtn: { width: 26, height: 26, background: "transparent", border: "none", cursor: "pointer", padding: 0, display: "flex", alignItems: "center", justifyContent: "center" },
+    title: { fontFamily: F.serif, fontSize: 22, color: C.dark, margin: 0 },
     scroll: { flex: 1, overflowY: "auto", padding: "0 20px 20px" },
     sectionLabel: {
         fontFamily: F.mono,

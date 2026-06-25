@@ -22,7 +22,6 @@ export function OngDashboard({ go, items }) {
                     <p style={styles.sectionLabel}>EM ANDAMENTO</p>
                 </div>
 
-                {/* Renderização Dinâmica dos Itens */}
                 {items.map((item) => {
                     const percentage = item.target > 0 ? Math.min(100, Math.round((item.current / item.target) * 100)) : 0;
                     return (

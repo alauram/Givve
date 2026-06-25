@@ -3,7 +3,7 @@ import { C, F } from "../theme/tokens";
 import { PartnerBottomNav } from "../components/PartnerBottomNav";
 import Toggle from "../components/Toggle";
 
-export function PartnerSettings({ go, showToast, settings, onToggle }) {
+export function PartnerSettings({ go, showToast, settings, onToggle, onLogout }) {
     return (
         <div style={styles.page}>
             <div style={{ padding: "24px 20px 16px", textAlign: "center" }}>
@@ -36,6 +36,15 @@ export function PartnerSettings({ go, showToast, settings, onToggle }) {
                     >
                         <span style={styles.text}>Gerenciar meus dados</span>
                         <ChevronRight size={18} color={C.soft} />
+                    </button>
+                </div>
+
+                <div style={styles.card}>
+                    <button
+                        style={styles.linkRow}
+                        onClick={onLogout}
+                    >
+                        <span style={{ ...styles.text, color: C.danger }}>Sair</span>
                     </button>
                 </div>
             </div>

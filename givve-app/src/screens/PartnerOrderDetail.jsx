@@ -3,7 +3,6 @@ import { Users } from "lucide-react";
 import { C, F } from "../theme/tokens";
 import ScreenHeader from "../components/ScreenHeader";
 
-// Nosso "banco de dados" de pedidos
 const ORDERS_DB = {
     1042: {
         id: 1042,
@@ -20,7 +19,7 @@ const ORDERS_DB = {
         id: 1041,
         destino: "ONG Esperança",
         tipo: "Retirada",
-        dist: null, // Sem distância, pois é retirada
+        dist: null,
         items: [
             { nome: "Desinfetante", qtd: 2 },
             { nome: "Sabonete Líquido", qtd: 2 },
@@ -30,23 +29,28 @@ const ORDERS_DB = {
 
 const STATUS_LABELS = ["Em preparação", "Aguardando entrega/retirada", "Pedido recebido"];
 
-export default function PartnerOrderDetail({ go, showToast, orderId }) {
-    // Busca o pedido selecionado (ou fallback pro 1042 se não achar)
+export default function PartnerOrderDetail({ go, showToast, orderId, progress, onUpdateProgress }) {
     const ORDER = ORDERS_DB[orderId] || ORDERS_DB[1042];
 
     const [checked, setChecked] = useState(() =>
-        Object.fromEntries(ORDER.items.map((it) => [it.nome, false]))
+        progress?.checked ?? Object.fromEntries(ORDER.items.map((it) => [it.nome, false]))
     );
-    const [status, setStatus] = useState(0);
+    const [status, setStatus] = useState(() => progress?.status ?? 0);
 
     const allChecked = ORDER.items.every((it) => checked[it.nome]);
 
     const toggleItem = (nome) =>
-        setChecked((s) => ({ ...s, [nome]: !s[nome] }));
+        setChecked((s) => {
+            const next = { ...s, [nome]: !s[nome] };
+            onUpdateProgress({ checked: next, status });
+            return next;
+        });
 
     const advance = () => {
         if (status < STATUS_LABELS.length - 1) {
-            setStatus((s) => s + 1);
+            const next = status + 1;
+            setStatus(next);
+            onUpdateProgress({ checked, status: next });
             if (status === STATUS_LABELS.length - 2) {
                 showToast("Pedido marcado como recebido!");
             }

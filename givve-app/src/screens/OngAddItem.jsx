@@ -15,7 +15,6 @@ export function OngAddItem({ go, showToast, onAdd }) {
             return;
         }
 
-        // Envia os dados crus do formulário para o App.jsx processar
         onAdd({
             name: name,
             quantity: quantity,

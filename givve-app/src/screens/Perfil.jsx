@@ -1,4 +1,4 @@
-import { ChevronRight, Package, Settings, FileText, Building2, LogOut } from "lucide-react";
+import { ChevronRight, Package, Settings, FileText, LogOut } from "lucide-react";
 import { C, F } from "../theme/tokens";
 import { TopBar } from "../components/TopBar";
 import { Card } from "../components/Card";
@@ -7,13 +7,12 @@ import { Avatar } from "../components/Avatar";
 import { BottomNav } from "../components/BottomNav";
 
 
-export function Perfil({ go, showToast }) {
+export function Perfil({ go, showToast, onLogout }) {
   const stats = [["12", "doações"], ["38", "itens"]];
   const menu = [
     { Icon: Package, t: "Minhas doações", onClick: () => showToast("Em breve") },
     { Icon: Settings, t: "Configurações", onClick: () => go("a9") },
     { Icon: FileText, t: "Perguntas frequentes", onClick: () => go("a11") },
-    { Icon: Building2, t: "Painel da ONG", onClick: () => go("management") },
   ];
   return (
     <>
@@ -45,7 +44,7 @@ export function Perfil({ go, showToast }) {
             <ChevronRight size={18} color={C.iconOff} />
           </Card>
         ))}
-        <Card onClick={() => { showToast("Saindo…"); go("buscar"); }}
+        <Card onClick={onLogout}
           style={{ padding: "13px 14px", marginTop: 4, display: "flex", alignItems: "center", gap: 12 }}>
           <LogOut size={20} color={C.danger} />
           <span style={{ flex: 1, fontSize: 14, color: C.danger }}>Sair</span>

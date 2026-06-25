@@ -3,7 +3,7 @@ import { C, F } from '../theme/tokens';
 import ScreenHeader from '../components/ScreenHeader';
 import Toggle from '../components/Toggle';
 
-export default function SettingsScreen({ settings, onToggle, onNavigateNotifications, onNavigateData, onBack, go, showToast }) {
+export default function SettingsScreen({ settings, onToggle, onNavigateNotifications, onNavigateData, onBack, onLogout }) {
   return (
     <div style={styles.page}>
       <ScreenHeader title="Configurações" onBack={onBack} />
@@ -59,7 +59,7 @@ export default function SettingsScreen({ settings, onToggle, onNavigateNotificat
           </button>
         </Section>
 
-        <button style={styles.logoutButton} onClick={() => { showToast("Saindo…"); go("buscar"); }}>Sair</button>
+        <button style={styles.logoutButton} onClick={onLogout}>Sair</button>
       </div>
     </div>
   );

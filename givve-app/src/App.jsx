@@ -3,6 +3,7 @@ import { MERCADOS } from "./data/needs";
 import { notifications as initialNotifications, faqItems, initialNeeds, campaignGoal } from "./data/mockData";
 import { PhoneFrame } from "./components/PhoneFrame";
 import { Toast } from "./components/Toast";
+import { Login } from "./screens/Login";
 import { Buscar } from "./screens/Buscar";
 import { EscolherItem } from "./screens/EscolherItem";
 import { Fornecedores } from "./screens/Fornecedores";
@@ -10,7 +11,7 @@ import { Pagamento } from "./screens/Pagamento";
 import { Confirmacao } from "./screens/Confirmacao";
 import { Perfil } from "./screens/Perfil";
 import PartnerDashboard from "./screens/PartnerDashboard";
-import { MeuEstabelecimento } from "./screens/MeuEstabelecimento";
+import { MeuEstabelecimento, ESTABELECIMENTO_INICIAL } from "./screens/MeuEstabelecimento";
 import { PartnerHistory } from "./screens/PartnerHistory";
 import PartnerOrderDetail from "./screens/PartnerOrderDetail";
 import SettingsScreen from "./screens/SettingsScreen";
@@ -22,11 +23,11 @@ import { PartnerSettings } from "./screens/PartnerSettings";
 import { OngDashboard } from "./screens/OngDashboard";
 import { OngAddItem } from "./screens/OngAddItem";
 import { OngHistory } from "./screens/OngHistory";
-import { OngProfile } from "./screens/OngProfile";
+import { OngProfile, MISSAO_INICIAL } from "./screens/OngProfile";
 import { OngSettings } from "./screens/OngSettings";
 
 export default function App() {
-  const [screen, setScreen] = useState("ongTracking");
+  const [screen, setScreen] = useState("login");
   const [market, setMarket] = useState(MERCADOS[0]);
   const [ong, setOng] = useState("ONG Esperança");
   const [cart, setCart] = useState([]);
@@ -41,7 +42,6 @@ export default function App() {
     ]);
 
     const handleAddOngItem = (data) => {
-        // 1. Atualiza a lista da tela de Gestão (Management)
         setNeeds((prev) => [{
             id: Date.now(),
             name: data.name,
@@ -49,7 +49,6 @@ export default function App() {
             urgent: data.urgency === "Alta"
         }, ...prev]);
 
-        // 2. Atualiza a tela de Acompanhamento (Barrinhas)
         const colors = ["#1E3A8A", "#D97706", "#059669", "#DC2626", "#7C3AED", "#2563EB"];
         const randomColor = colors[Math.floor(Math.random() * colors.length)];
 
@@ -68,6 +67,9 @@ export default function App() {
     donationStatus: false,
   });
   const [anonymousDonations, setAnonymousDonations] = useState(false);
+  const [estabelecimento, setEstabelecimento] = useState(ESTABELECIMENTO_INICIAL);
+  const [ongMissao, setOngMissao] = useState(MISSAO_INICIAL);
+  const [orderProgress, setOrderProgress] = useState({});
   const [notifications, setNotifications] = useState(initialNotifications);
   const [needs, setNeeds] = useState(initialNeeds);
   const [prevScreen, setPrevScreen] = useState("buscar");
@@ -88,20 +90,27 @@ export default function App() {
   const iniciarDoacao = (o, it) => { setOng(o); setPreItem(it); go("a4"); };
   const handleToggleSetting = (key, value) => setSettings((prev) => ({ ...prev, [key]: value }));
   const handleMarkAllRead = () => setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
+  const handleLogout = () => {
+    setSettings((prev) => ({ ...prev, colorBlindMode: false }));
+    showToast("Saindo…");
+    go("login");
+  };
 
-  // NOVO: Função para navegar para o pedido correto
   const abrirPedidoParceiro = (id) => {
     setPartnerOrderId(id);
     go("partnerOrder");
   };
+  const handleUpdateOrderProgress = (id, data) =>
+    setOrderProgress((prev) => ({ ...prev, [id]: data }));
 
   const telas = {
+    login: <Login go={go} showToast={showToast} />,
     buscar: <Buscar go={go} showToast={showToast} iniciarDoacao={iniciarDoacao} />,
     a4: <EscolherItem ong={ong} initialItem={preItem} setCart={setCart} go={go} />,
     a5: <Fornecedores go={go} setMarket={setMarket} ong={ong} />,
     a6: <Pagamento go={go} market={market} ong={ong} cart={cart} showToast={showToast} />,
     a7: <Confirmacao go={go} ong={ong} />,
-    a8: <Perfil go={go} showToast={showToast} />,
+    a8: <Perfil go={go} showToast={showToast} onLogout={handleLogout} />,
     a9: (
         <SettingsScreen
             settings={settings}
@@ -109,6 +118,7 @@ export default function App() {
             onNavigateNotifications={() => go("a10")}
             onNavigateData={() => go("manageData")}
             onBack={() => go("a8")}
+            onLogout={handleLogout}
             go={go}
             showToast={showToast}
         />
@@ -141,21 +151,29 @@ export default function App() {
               go={go}
           />
       ),
-    partnerHome: <PartnerDashboard go={go} showToast={showToast} abrirPedido={abrirPedidoParceiro} />,
+    partnerHome: <PartnerDashboard go={go} showToast={showToast} abrirPedido={abrirPedidoParceiro} orderProgress={orderProgress} />,
     partnerHistory: <PartnerHistory go={go} showToast={showToast} abrirPedido={abrirPedidoParceiro} />,
-    partnerStore: <MeuEstabelecimento go={go} showToast={showToast} />,
-    partnerSettings: <PartnerSettings go={go} showToast={showToast} settings={settings} onToggle={handleToggleSetting} />,
-    partnerOrder: <PartnerOrderDetail key={`order-${partnerOrderId}`} go={go} showToast={showToast} orderId={partnerOrderId} />,
+    partnerStore: <MeuEstabelecimento go={go} showToast={showToast} estabelecimento={estabelecimento} onSaveEstabelecimento={setEstabelecimento} />,
+    partnerSettings: <PartnerSettings go={go} showToast={showToast} settings={settings} onToggle={handleToggleSetting} onLogout={handleLogout} />,
+    partnerOrder: (
+        <PartnerOrderDetail
+            key={`order-${partnerOrderId}`}
+            go={go}
+            showToast={showToast}
+            orderId={partnerOrderId}
+            progress={orderProgress[partnerOrderId]}
+            onUpdateProgress={(data) => handleUpdateOrderProgress(partnerOrderId, data)}
+        />
+    ),
       ongTracking: <OngDashboard go={go} showToast={showToast} items={ongItems} />,
       ongAddItem: <OngAddItem go={go} showToast={showToast} onAdd={handleAddOngItem} />,
     ongHistory: <OngHistory go={go} showToast={showToast} />,
-    ongProfile: <OngProfile go={go} showToast={showToast} />,
-      ongSettings: <OngSettings go={go} showToast={showToast} settings={settings} onToggle={handleToggleSetting} />,
+    ongProfile: <OngProfile go={go} showToast={showToast} missao={ongMissao} onSaveMissao={setOngMissao} />,
+      ongSettings: <OngSettings go={go} showToast={showToast} settings={settings} onToggle={handleToggleSetting} onLogout={handleLogout} />,
   };
 
   return (
       <PhoneFrame>
-        {/* Filtro Matemático de Deuteranopia */}
         <svg style={{ width: 0, height: 0, position: "absolute" }}>
           <defs>
             <filter id="deuteranopia">
@@ -178,9 +196,8 @@ export default function App() {
               flexDirection: "column",
               minHeight: 0,
               animation: "gvIn .22s ease",
-              // O filtro é ativado aqui dinamicamente:
               filter: settings.colorBlindMode ? "url(#deuteranopia)" : "none",
-              transition: "filter 0.3s ease" // Transição suave ao ligar/desligar
+              transition: "filter 0.3s ease"
             }}
         >
           {telas[screen]}
