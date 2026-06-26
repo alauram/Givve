@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { MERCADOS } from "./data/needs";
-import { notifications as initialNotifications, faqItems, initialNeeds, campaignGoal } from "./data/mockData";
+import { notifications as initialNotifications, faqItems, initialNeeds, campaignGoal, initialDonations } from "./data/mockData";
 import { PhoneFrame } from "./components/PhoneFrame";
 import { Toast } from "./components/Toast";
 import { Login } from "./screens/Login";
@@ -27,6 +27,8 @@ import { OngHistory } from "./screens/OngHistory";
 import { OngProfile, MISSAO_INICIAL } from "./screens/OngProfile";
 import { OngSettings } from "./screens/OngSettings";
 import { OngDetails } from "./screens/OngDetails"; // IMPORTAÇÃO ADICIONADA AQUI
+import MinhasDoacoes from "./screens/MinhasDoacoes";
+
 
 export default function App() {
     const [screen, setScreen] = useState("login");
@@ -75,6 +77,7 @@ export default function App() {
     const [notifications, setNotifications] = useState(initialNotifications);
     const [needs, setNeeds] = useState(initialNeeds);
     const [prevScreen, setPrevScreen] = useState("buscar");
+    const [donations, setDonations] = useState(initialDonations);
 
     const go = (target) => {
         setPrevScreen(screen);
@@ -123,7 +126,26 @@ export default function App() {
 
         a4: <EscolherItem ong={ong} initialItem={preItem} setCart={setCart} go={go} />,
         a5: <Fornecedores go={go} setMarket={setMarket} ong={ong} />,
-        a6: <Pagamento go={go} market={market} ong={ong} cart={cart} showToast={showToast} />,
+        a6: (
+            <Pagamento
+                go={go}
+                market={market}
+                ong={ong}
+                cart={cart}
+                showToast={showToast}
+                onConfirmarPagamento={(novaDoacao) => {
+                    const doacaoCompleta = {
+                        id: Date.now(),
+                        date: new Date().toLocaleDateString("pt-BR"),
+                        status: "Em andamento",
+                        ...novaDoacao
+                    };
+                    setDonations((prev) => [doacaoCompleta, ...prev]);
+                    setCart([]);
+                    go("a7");
+                }}
+            />
+        ),
         a7: <Confirmacao go={go} ong={ong} />,
         a8: <Perfil go={go} showToast={showToast} onLogout={handleLogout} />,
         a9: (
@@ -150,6 +172,7 @@ export default function App() {
             />
         ),
         a11: <HelpScreen faqItems={faqItems} onBack={() => go(prevScreen)} showToast={showToast} />,
+        minhasDoacoes: <MinhasDoacoes donations={donations} onBack={() => go("a8")} />,
         manageData: (
             <ManageDataScreen
                 anonymousDonations={anonymousDonations}

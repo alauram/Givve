@@ -59,3 +59,30 @@ export const campaignGoal = {
   current: 8400,
   target: 12000,
 };
+
+export const initialDonations = [
+  {
+    id: 101,
+    ong: "ONG Esperança",
+    date: "23/06/2026",
+    market: "Mercado Central",
+    items: [
+      { nome: "Leite integral", qtd: 6, preco: 6.00 },
+      { nome: "Arroz 5kg", qtd: 2, preco: 27.00 }
+    ],
+    total: 90.00,
+    status: "Entregue"
+  },
+  {
+    id: 102,
+    ong: "Casa do Caminho",
+    date: "24/06/2026",
+    market: "Supermercado do Bairro",
+    items: [
+      { nome: "Absorventes", qtd: 5, preco: 8.50 }
+    ],
+    total: 42.50,
+    status: "Entregue"
+  }
+];
+

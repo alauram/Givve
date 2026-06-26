@@ -40,7 +40,7 @@ export function PartnerHistory({ go, showToast, abrirPedido }) {
                     </button>
                 ))}
 
-                <p style={styles.sectionLabel} style={{ ...styles.sectionLabel, marginTop: 24 }}>
+                <p style={{ ...styles.sectionLabel, marginTop: 24 }}>
                     CONCLUÍDOS
                 </p>
                 {PAST_ORDERS.map((o) => (

@@ -113,7 +113,7 @@ export function OngDetails({ go, ong, iniciarDoacao, onBack }) {
                 <p style={styles.metaSub}>{data.metaStr}</p>
 
                 {/* Lista de necessidades Dinâmica */}
-                <p style={styles.sectionLabel} style={{ ...styles.sectionLabel, marginTop: 24 }}>
+                <p style={{ ...styles.sectionLabel, marginTop: 24 }}>
                     LISTA DE NECESSIDADES
                 </p>
 

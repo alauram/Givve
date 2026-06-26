@@ -10,7 +10,7 @@ import { BottomNav } from "../components/BottomNav";
 export function Perfil({ go, showToast, onLogout }) {
   const stats = [["12", "doações"], ["38", "itens"]];
   const menu = [
-    { Icon: Package, t: "Minhas doações", onClick: () => showToast("Em breve") },
+    { Icon: Package, t: "Minhas doações", onClick: () => go("minhasDoacoes") },
     { Icon: Settings, t: "Configurações", onClick: () => go("a9") },
     { Icon: FileText, t: "Perguntas frequentes", onClick: () => go("a11") },
   ];

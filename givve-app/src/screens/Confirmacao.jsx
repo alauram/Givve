@@ -60,7 +60,7 @@ export function Confirmacao({ go, ong }) {
         </div>
 
         <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-          <Button onClick={() => go("a8")}>Ver minhas doações</Button>
+          <Button onClick={() => go("minhasDoacoes")}>Ver minhas doações</Button>
           <Button variant="ghost" onClick={() => setShowShare(true)} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
             <Share2 size={16} /> Compartilhar
           </Button>

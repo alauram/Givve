@@ -8,7 +8,7 @@ import { Button } from "../components/Button";
 import { QrCode } from "../components/QrCode";
 
 
-export function Pagamento({ go, market, ong, cart, showToast }) {
+export function Pagamento({ go, market, ong, cart, showToast, onConfirmarPagamento }) {
   const total = cart.reduce((s, i) => s + i.qtd * i.preco, 0);
   const copiar = async () => {
     try { await navigator.clipboard.writeText(PIX); } catch (e) {}
@@ -56,7 +56,7 @@ export function Pagamento({ go, market, ong, cart, showToast }) {
           <span style={{ fontSize: 13, color: C.soft }}>Total</span>
           <span style={{ fontFamily: F.serif, fontSize: 18, color: C.dark }}>{brl(total)}</span>
         </div>
-        <Button onClick={() => go("a7")}>Confirmar pagamento</Button>
+        <Button onClick={() => onConfirmarPagamento({ total, items: cart, market: market.nome, ong })}>Confirmar pagamento</Button>
       </div>
     </>
   );

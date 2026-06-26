@@ -37,7 +37,7 @@ export function OngDashboard({ go, items }) {
                     );
                 })}
 
-                <p style={styles.sectionLabel} style={{...styles.sectionLabel, marginTop: 16}}>ÚLTIMAS DOAÇÕES</p>
+                <p style={{...styles.sectionLabel, marginTop: 16}}>ÚLTIMAS DOAÇÕES</p>
                 <div style={styles.donationCard}>
                     <span style={styles.donationName}>Lucas F. - 7 Itens</span>
                     <span style={styles.donationTime}>há 5 min</span>
