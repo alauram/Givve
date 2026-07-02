@@ -6,7 +6,7 @@ export function OngDashboard({ go, items }) {
     return (
         <div style={styles.page}>
             <div style={styles.header}>
-                <h1 style={styles.title}>acompanhamento</h1>
+                <h1 style={styles.title}>Acompanhamento</h1>
             </div>
 
             <div style={styles.scroll}>
